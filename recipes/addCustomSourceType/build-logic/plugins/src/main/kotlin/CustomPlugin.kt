@@ -41,7 +41,8 @@ class CustomPlugin : Plugin<Project> {
             val androidComponents =
                 project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
 
-            // Registers the custom source type
+            // Registers the custom source type.
+            // This creates all the relevant src/*/toml in each sourcesets
             androidComponents.registerSourceType("toml")
 
             // Registers a callback to be called, when a new variant is configured
@@ -50,7 +51,6 @@ class CustomPlugin : Plugin<Project> {
                 val addSourceTaskProvider =  project.tasks.register<AddCustomSources>("${variant.name}AddCustomSources") {
                     outputFolder.set(File(project.layout.buildDirectory.asFile.get(), "toml/gen"))
                 }
-                File(project.projectDir, "third_party/${variant.name}/toml").mkdirs()
 
                 variant.sources.getByName("toml").also {
                     // adding custom folders (static and generated) to `toml` source type

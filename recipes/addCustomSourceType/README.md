@@ -12,6 +12,8 @@ androidComponents {
 }
 ```
 
+This will register a toml folder in each sourcesets (e.g. src/main/toml, src/debug/toml, etc...)
+
 To access the custom sources, you just need to use
 `sourceFolders.set(variant.sources.getByName("toml").getAll())`
 which can be used as [Task] input directly.
