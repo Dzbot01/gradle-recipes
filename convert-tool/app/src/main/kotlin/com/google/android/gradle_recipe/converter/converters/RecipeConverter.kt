@@ -109,8 +109,8 @@ class RecipeConverter(
                 }
             }
 
-            if (mode == Mode.WORKINGCOPY) {
-                converter.minAgp = recipeData.minAgpVersion
+            if (converter is WorkingCopyConverter) {
+                converter.agpVersion = agpVersion ?: recipeData.minAgpVersion
             }
 
             Files.walkFileTree(source, object : SimpleFileVisitor<Path>() {
@@ -166,8 +166,6 @@ class RecipeConverter(
             if (generateWrapper && mode != Mode.SOURCE) {
                 converter.copyGradleFolder(recipeDestination)
             }
-
-            converter.minAgp = null
 
             ResultMode.SUCCESS
         } else {
