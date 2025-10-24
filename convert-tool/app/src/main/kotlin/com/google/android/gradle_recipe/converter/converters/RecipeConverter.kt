@@ -52,6 +52,7 @@ class RecipeConverter(
     val agpVersion: FullAgpVersion?,
     gradleVersion: String?,
     private val mode: Mode,
+    private val strictVersionCheck: Boolean,
     private val generateWrapper: Boolean = true,
 ) {
     private val converter: Converter
@@ -110,7 +111,7 @@ class RecipeConverter(
             }
 
             if (converter is WorkingCopyConverter) {
-                converter.agpVersion = agpVersion ?: recipeData.minAgpVersion
+                converter.agpVersion = agpVersion ?: recipeData.minAgpVersion.toFull()
             }
 
             Files.walkFileTree(source, object : SimpleFileVisitor<Path>() {
@@ -169,7 +170,18 @@ class RecipeConverter(
 
             ResultMode.SUCCESS
         } else {
-            println("Couldn't convert $source due to AGP version compliance ")
+            val msg = buildString {
+                append("Couldn't convert $source due to AGP version compliance:\n")
+                append("- Requested AGP $agpVersion\n")
+                append("- Recipe minAGP is ${recipeData.minAgpVersion}\n")
+                recipeData.maxAgpVersion?.let {
+                    append("- Recipe maxAGP is $it\n")
+                }
+            }
+            println(msg)
+            if (strictVersionCheck) {
+                throw RuntimeException(msg)
+            }
             ResultMode.SKIPPED
         }
 
