@@ -29,7 +29,7 @@ import kotlin.io.path.name
  * This validator takes a working copy and validate that it still works.
  *
  * It does this by converting it back to source mode in a temp folder, and then validates it with whatever AGP
- * version rage is declared (either min/max or min and current AGP version)
+ * version range is declared (either min/max or min and current AGP version)
  */
 class WorkingCopyValidator(
     private val context: Context,
