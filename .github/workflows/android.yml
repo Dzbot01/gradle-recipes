@@ -9,21 +9,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # Setup Java 17
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
+      # Pastikan gradlew executable
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build APK
+      # Build APK debug
+      - name: Build Debug APK
         run: ./gradlew :app:assembleDebug
 
+      # Upload APK sebagai artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
